@@ -6,7 +6,7 @@ Application Movie Library was created to manage the movies available on the new 
 
 ## Database description
 
-Application uses the SQLite database located in the **MovieLibrary.db** in **MovieLibrary.Api** project. Below you can find a description of all the entities.
+Application uses the SQLite database with entity framework core using eager loading approach. Database file is located in the **MovieLibrary.db** in **MovieLibrary.Api** project. You can use DB Browser for SQLite to browse the database. Below you can find a description of all the entities.
 
 ### Movie
 Contains data about movies
