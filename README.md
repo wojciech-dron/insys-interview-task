@@ -4,6 +4,14 @@
 
 Application Movie Library was created to manage the movies available on the new streaming service called **InsysGo**. Main developer Stefan before his vacation implemented only a database connection and filled it with example data. Your task will be to finish the work started by Stefan within 7 days, after which Stefan will come back to evaluate your work. Below you will find the requirements and a list of tasks left to you, some of them are marked **\***, these are bonus tasks that you do not have to implement, but their implementation will speed up the launch of **InsysGo**.
 
+## How to run
+
+To start the application you will need:
+- IDE (i.e. Visual Studio, Visual Studio Code)
+- Installed .NET core 3.1
+
+Set **MovieLibrary.Api** as a startup project and after run SQLite database will be connected automatically you don't need to install anything.
+
 ## Database description
 
 Application uses the SQLite database with entity framework core using eager loading approach. Database file is located in the **MovieLibrary.db** in **MovieLibrary.Api** project. You can use DB Browser for SQLite to browse the database. Below you can find a description of all the entities.
@@ -64,6 +72,7 @@ public int CategoryId { get; set; }
 ### Filter movies by text
 
 Parameters:
+
 - text = harry
 ```json
 {
@@ -103,6 +112,7 @@ Parameters:
 ### Filter movies by list of categories
 
 Parameters:
+
 - categoriesId = 3,11
 ```json
 {
@@ -142,6 +152,7 @@ Parameters:
 ### Filter movies by minimum and maximum IMDB
 
 Parameters:
+
 - minImdb = 8.1
 - maxImdb = 8.3
 ```json
