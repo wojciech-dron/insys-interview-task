@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Application Movie Library was created to manage the movies available on the new streaming service called **InsysGo**. Main developer Stefan before his vacation implemented only a database connection and filled it with example data. Your task will be to finish the work started by Stefan within 7 days, after which Stefan will come back to evaluate your work. Below you will find the requirements and a list of tasks left to you, some of them are marked **\***, these are bonus tasks that you do not have to implement, but their implementation will speed up the launch of **InsysGo**.
+Application Movie Library was created to manage the movies available on the new streaming service called **InsysGo**. Main developer Stefan before his vacation implemented only a database connection and filled it with example data. Your task will be to finish the work started by Stefan within given days, after which Stefan will come back to evaluate your work. Below you will find the requirements and a list of tasks left to you, some of them are marked **\***, these are bonus tasks that you do not have to implement, but their implementation will speed up the launch of **InsysGo**.
 
 ## How to run
 
