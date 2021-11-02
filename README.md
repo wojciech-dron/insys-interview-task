@@ -74,6 +74,7 @@ public int CategoryId { get; set; }
 Parameters:
 
 - text = harry
+
 ```json
 {
     [
@@ -114,6 +115,7 @@ Parameters:
 Parameters:
 
 - categoriesId = 3,11
+
 ```json
 {
     [
@@ -155,6 +157,7 @@ Parameters:
 
 - minImdb = 8.1
 - maxImdb = 8.3
+
 ```json
 {
     [
