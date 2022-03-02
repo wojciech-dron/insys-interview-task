@@ -1,4 +1,4 @@
-# Interview task - backend developer intern
+# Interview task - backend developer
 
 ## Introduction
 
@@ -62,8 +62,8 @@ public int CategoryId { get; set; }
         - by movie minimum and maximum IMDB rating
     - returned data should be sorted descending by IMDB rating 
     - endpoint should return data as JSON
-    - **\*** should allow paging
-- **\*** Create tests for application
+    - should allow paging
+- Create tests for application
 
 \* **Bonus task**
 
