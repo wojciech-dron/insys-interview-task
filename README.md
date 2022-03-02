@@ -65,8 +65,6 @@ public int CategoryId { get; set; }
     - should allow paging
 - Create tests for application
 
-\* **Bonus task**
-
 ## Examples
 
 ### Filter movies by text
