@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MovieLibrary.Core;
 using MovieLibrary.Data;
 
 namespace MovieLibrary.Api
@@ -20,12 +21,15 @@ namespace MovieLibrary.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddEntityFrameworkSqlite().AddDbContext<MovieLibraryContext>();
-
             services.AddControllers();
+            
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Movie library API", Version = "v1" });
             });
+            
+            services.AddDataModule();
+            services.AddCoreModule();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
