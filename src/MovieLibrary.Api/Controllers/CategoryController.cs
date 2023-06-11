@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MovieLibrary.Api.Models;
 using MovieLibrary.Core.Commands.Categories;
 using MovieLibrary.Core.Dtos;
 using MovieLibrary.Core.Queries;
@@ -35,6 +36,7 @@ public class CategoryController : ControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(CategoryDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Get(int id)
     {
         var result = await _queries.Get(id);
@@ -43,6 +45,8 @@ public class CategoryController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(CategoryDto), (int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Post([FromBody] CreateCategoryCommand createCategoryCommand)
     {
         var result = await _mediator.Send(createCategoryCommand);
@@ -51,6 +55,8 @@ public class CategoryController : ControllerBase
 
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(CategoryDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Put([FromRoute] int id,
         [FromBody] UpdateCategoryCommand updateCategoryCommand)
     {
@@ -61,6 +67,7 @@ public class CategoryController : ControllerBase
 
     [HttpDelete("{id}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task Delete(int id)
     {
         await _mediator.Send(new DeleteCategoryCommand { Id = id });

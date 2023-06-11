@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MovieLibrary.Api.Models;
 using MovieLibrary.Core.Commands.Movies;
 using MovieLibrary.Core.Dtos;
 using MovieLibrary.Core.Queries;
@@ -26,10 +27,9 @@ public class MovieController : ControllerBase
         _queries = queries;
     }
     
-
-
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(MovieDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Get(int id)
     {
         var result = await _queries.Get(id);
@@ -38,6 +38,8 @@ public class MovieController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(MovieDto), (int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Post([FromBody] CreateMovieCommand createMovieCommand)
     {
         var result = await _mediator.Send(createMovieCommand);
@@ -46,6 +48,8 @@ public class MovieController : ControllerBase
 
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(MovieDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> Put([FromRoute] int id,
         [FromBody] UpdateMovieCommand updateMovieCommand)
     {
@@ -56,6 +60,7 @@ public class MovieController : ControllerBase
 
     [HttpDelete("{id}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     public async Task Delete(int id)
     {
         await _mediator.Send(new DeleteMovieCommand { Id = id });
