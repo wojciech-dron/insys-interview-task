@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MovieLibrary.Core.Commands.Categories;
 using MovieLibrary.Core.Commands.Movies;
 using MovieLibrary.Core.Dtos;
 using MovieLibrary.Core.Queries;
@@ -27,12 +26,7 @@ public class MovieController : ControllerBase
         _queries = queries;
     }
     
-    [HttpGet]
-    public async Task<IActionResult> GetList()
-    {
-        var result = await _queries.GetAllAsync();
-        return Ok(result);
-    }
+
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(MovieDto), (int)HttpStatusCode.OK)]

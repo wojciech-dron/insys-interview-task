@@ -87,7 +87,7 @@ internal class CreateMovieCommandProfile : Profile
     {
         CreateMap<CreateMovieCommand, Movie>()
             .ForMember(dst => dst.Id , opt => opt.Ignore())
-            .ForMember(dst => dst.MovieCategories, opt => opt.MapFrom(src => src.Categories
-                .ConvertAll(categoryId => new MovieCategory { CategoryId = categoryId })));
+            .ForMember(dst => dst.MovieCategories, opt => opt.MapFrom(src =>
+                src.Categories.ConvertAll(categoryId => new MovieCategory { CategoryId = categoryId })));
     }
 }

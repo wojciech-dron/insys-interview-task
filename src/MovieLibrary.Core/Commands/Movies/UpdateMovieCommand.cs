@@ -93,7 +93,7 @@ internal class UpdateMovieProfile : Profile
     public UpdateMovieProfile()
     {
         CreateMap<UpdateMovieCommand, Movie>()
-            .ForMember(dst => dst.MovieCategories, opt => opt.MapFrom(src => src.Categories
-                .ConvertAll(categoryId => new MovieCategory { CategoryId = categoryId })));
+            .ForMember(dst => dst.MovieCategories, opt => opt.MapFrom(src => 
+                src.Categories.ConvertAll(categoryId => new MovieCategory { CategoryId = categoryId })));
     }
 }
