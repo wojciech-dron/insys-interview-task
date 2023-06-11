@@ -50,7 +50,7 @@ public class CategoryController : ControllerBase
 
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(CategoryDto), (int)HttpStatusCode.Accepted)]
-    public async Task<IActionResult> Put([FromQuery] int id,
+    public async Task<IActionResult> Put([FromRoute] int id,
         [FromBody] UpdateCategoryCommand updateCategoryCommand)
     {
         updateCategoryCommand.Id = id;

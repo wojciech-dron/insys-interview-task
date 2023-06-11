@@ -1,7 +1,10 @@
-﻿using System.Threading;
+﻿using System.Data;
+using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
+using MovieLibrary.Core.Exceptions;
 using MovieLibrary.Data.Entities;
 using MovieLibrary.Data.Repositories;
 
@@ -9,7 +12,7 @@ namespace MovieLibrary.Core.Commands.Categories;
 
 public class UpdateCategoryCommand : IRequest<Category>
 {
-    public int Id { get; set; }
+    [JsonIgnore] public int Id { get; set; }
     public string Name { get; set; }
 }
 
@@ -20,9 +23,8 @@ public class UpdateCategoryValidator : AbstractValidator<UpdateCategoryCommand>
     public UpdateCategoryValidator(ICategoryRepository repository)
     {
         _repository = repository;
-        
-        RuleFor(x => x.Id)
-            .MustAsync(ExistAsync);
+
+        RuleFor(x => x.Id).GreaterThan(0);
         
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -34,11 +36,6 @@ public class UpdateCategoryValidator : AbstractValidator<UpdateCategoryCommand>
     private async Task<bool> UniqueAsync(string name, CancellationToken cancellationToken)
     {
         return await _repository.IsNameUniqueAsync(name);
-    }
-
-    private async Task<bool> ExistAsync(int id, CancellationToken cancellationToken)
-    {
-        return await _repository.ExistsAsync(id);
     }
 }
 
@@ -62,6 +59,10 @@ public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Cate
             throw new ValidationException(validationResult.Errors);
 
         var category = await _repository.GetAsync(request.Id);
+        
+        if (category is null)
+            throw new NotFoundException(typeof(Category), request.Id);
+        
         category.Name = request.Name;
         
         await _repository.UpdateAsync(category);
