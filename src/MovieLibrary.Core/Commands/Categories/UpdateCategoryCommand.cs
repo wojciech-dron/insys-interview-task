@@ -39,7 +39,7 @@ public class UpdateCategoryValidator : AbstractValidator<UpdateCategoryCommand>
     }
 }
 
-public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Category>
+internal class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Category>
 {
     private readonly ICategoryRepository _repository;
     private readonly IValidator<UpdateCategoryCommand> _validator;
@@ -58,14 +58,14 @@ public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Cate
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        var category = await _repository.GetAsync(request.Id);
+        var category = await _repository.GetAsync(request.Id, cancellationToken);
         
         if (category is null)
             throw new NotFoundException(typeof(Category), request.Id);
         
         category.Name = request.Name;
         
-        await _repository.UpdateAsync(category);
+        await _repository.UpdateAsync(category, cancellationToken);
         return category;
     }
 }

@@ -16,7 +16,8 @@ public static class IocExtensions
         services.AddValidatorsFromAssembly(assembly);
         services.AddSingleton(GetMapper(assembly));
 
-        services.AddScoped<CategoryQueries>();
+        services.AddScoped<ICategoryQueries, CategoryQueries>();
+        services.AddScoped<IMovieQueries, MovieQueries>();
     }
 
     internal static IMapper GetMapper(Assembly assembly)

@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using MovieLibrary.Api.Models;
 using MovieLibrary.Core.Exceptions;
 
+namespace MovieLibrary.Api.Middlewares;
+
 public class AppExceptionMiddleware
 {
     private readonly RequestDelegate _next;

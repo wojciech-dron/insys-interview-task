@@ -13,7 +13,7 @@ public class DeleteCategoryCommand : IRequest<Unit>
     public int Id { get; set; }
 }
 
-public class DeleteCategoryHandler : IRequestHandler<DeleteCategoryCommand, Unit>
+internal class DeleteCategoryHandler : IRequestHandler<DeleteCategoryCommand, Unit>
 {
     private readonly ICategoryRepository _repository;
 
@@ -25,12 +25,12 @@ public class DeleteCategoryHandler : IRequestHandler<DeleteCategoryCommand, Unit
     public async Task<Unit> Handle(DeleteCategoryCommand request,
         CancellationToken cancellationToken)
     {
-        var category = await _repository.GetAsync(request.Id);
+        var category = await _repository.GetAsync(request.Id, cancellationToken);
         
         if (category is null)
             throw new NotFoundException(typeof(Category), request.Id);
         
-        await _repository.DeleteAsync(category);
+        await _repository.DeleteAsync(category, cancellationToken);
 
         return Unit.Value;
     }

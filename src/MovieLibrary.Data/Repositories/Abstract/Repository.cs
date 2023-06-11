@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,46 +16,46 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         DbSet = Context.Set<TEntity>();
     }
     
-    public IQueryable<TEntity> GetQuery()
+    public virtual IQueryable<TEntity> GetQuery()
     {
         return DbSet.AsQueryable();
     }
 
-    public async Task<bool> ExistsAsync(int id)
+    public virtual async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default)
     {
-        return (await DbSet.FindAsync(id)) is not null;
+        return await DbSet.FindAsync(new object[] { id }, cancellationToken) is not null;
     }
 
-    public async Task<TEntity> GetAsync(int id)
+    public virtual async Task<TEntity> GetAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FindAsync(id);
+        return await DbSet.FindAsync(new object[] { id }, cancellationToken);
     }
 
-    public async Task<TEntity> AddAsync(TEntity entity)
+    public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        await DbSet.AddAsync(entity);
-        await SaveChangesAsync();
+        await DbSet.AddAsync(entity, cancellationToken);
+        await SaveChangesAsync(cancellationToken);
         
         return entity;
     }
     
-    public async Task<TEntity> UpdateAsync(TEntity entity)
+    public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         DbSet.Update(entity);
-        await SaveChangesAsync();
+        await SaveChangesAsync(cancellationToken);
 
         return entity;
     }
     
-    public async Task DeleteAsync(TEntity entity)
+    public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         DbSet.Remove(entity);
         
-        await SaveChangesAsync();
+        await SaveChangesAsync(cancellationToken);
     }
     
-    public async Task<int> SaveChangesAsync()
+    public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return await Context.SaveChangesAsync();
+        return await Context.SaveChangesAsync(cancellationToken);
     }
 }

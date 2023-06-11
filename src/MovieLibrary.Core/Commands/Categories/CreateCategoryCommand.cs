@@ -29,11 +29,11 @@ public class CreateCategoryValidator : AbstractValidator<CreateCategoryCommand>
 
     private async Task<bool> UniqueAsync(string name, CancellationToken cancellationToken)
     {
-        return await _repository.IsNameUniqueAsync(name);
+        return await _repository.IsNameUniqueAsync(name, cancellationToken);
     }
 }
 
-public class CreateCategoryHandler : IRequestHandler<CreateCategoryCommand, Category>
+internal class CreateCategoryHandler : IRequestHandler<CreateCategoryCommand, Category>
 {
     private readonly IValidator<CreateCategoryCommand> _validator;
     private readonly ICategoryRepository _repository;
@@ -57,7 +57,7 @@ public class CreateCategoryHandler : IRequestHandler<CreateCategoryCommand, Cate
             Name = request.Name
         };
 
-        await _repository.AddAsync(category);
+        await _repository.AddAsync(category, cancellationToken);
 
         return category;
     }

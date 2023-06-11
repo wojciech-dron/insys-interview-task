@@ -13,7 +13,6 @@ public class CategoryDtoProfile : Profile
 {
     public CategoryDtoProfile()
     {
-        CreateMap<Category, CategoryDto>()
-            .ReverseMap();
+        CreateMap<Category, CategoryDto>();
     }
 }

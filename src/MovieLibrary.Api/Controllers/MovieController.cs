@@ -4,22 +4,23 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Core.Commands.Categories;
+using MovieLibrary.Core.Commands.Movies;
 using MovieLibrary.Core.Dtos;
 using MovieLibrary.Core.Queries;
 
 namespace MovieLibrary.Api.Controllers;
 
-[Route("api/v1/CategoryManagement")]
+[Route("api/v1/MovieManagement")]
 [ApiController]
-public class CategoryController : ControllerBase
+public class MovieController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
-    private readonly ICategoryQueries _queries;
+    private readonly IMovieQueries _queries;
 
-    public CategoryController(IMediator mediator, 
+    public MovieController(IMediator mediator, 
         IMapper mapper,
-        ICategoryQueries queries)
+        IMovieQueries queries)
     {
         _mediator = mediator;
         _mapper = mapper;
@@ -34,7 +35,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(CategoryDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(MovieDto), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Get(int id)
     {
         var result = await _queries.Get(id);
@@ -42,27 +43,27 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(CategoryDto), (int)HttpStatusCode.Created)]
-    public async Task<IActionResult> Post([FromBody] CreateCategoryCommand createCategoryCommand)
+    [ProducesResponseType(typeof(MovieDto), (int)HttpStatusCode.Created)]
+    public async Task<IActionResult> Post([FromBody] CreateMovieCommand createMovieCommand)
     {
-        var result = await _mediator.Send(createCategoryCommand);
-        return CreatedAtRoute("", new {id = result.Id}, _mapper.Map<CategoryDto>(result));
+        var result = await _mediator.Send(createMovieCommand);
+        return CreatedAtRoute("", new {id = result.Id}, _mapper.Map<MovieDto>(result));
     }
 
     [HttpPut("{id}")]
-    [ProducesResponseType(typeof(CategoryDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(MovieDto), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Put([FromRoute] int id,
-        [FromBody] UpdateCategoryCommand updateCategoryCommand)
+        [FromBody] UpdateMovieCommand updateMovieCommand)
     {
-        updateCategoryCommand.Id = id;
-        var result = await _mediator.Send(updateCategoryCommand);
-        return Ok(_mapper.Map<CategoryDto>(result));
+        updateMovieCommand.Id = id;
+        var result = await _mediator.Send(updateMovieCommand);
+        return Ok(_mapper.Map<MovieDto>(result));
     }
 
     [HttpDelete("{id}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     public async Task Delete(int id)
     {
-        await _mediator.Send(new DeleteCategoryCommand { Id = id });
+        await _mediator.Send(new DeleteMovieCommand { Id = id });
     }
 }

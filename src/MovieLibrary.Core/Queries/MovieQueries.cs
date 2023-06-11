@@ -8,29 +8,29 @@ using MovieLibrary.Data.Repositories;
 
 namespace MovieLibrary.Core.Queries;
 
-public class CategoryQueries : ICategoryQueries
+public class MovieQueries : IMovieQueries
 {
-    private readonly ICategoryRepository _repository;
+    private readonly IMovieRepository _repository;
     private readonly IMapper _mapper;
 
-    public CategoryQueries(ICategoryRepository repository, 
+    public MovieQueries(IMovieRepository repository,
         IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
-
-    public async Task<CategoryDto> Get(int id)
+    
+    public async Task<MovieDto> Get(int id)
     {
         return await _repository.GetQuery()
-            .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<MovieDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
-    
-    public async Task<List<CategoryDto>> GetAllAsync()
+
+    public async Task<List<MovieDto>> GetAllAsync()
     {
         return await _repository.GetQuery()
-            .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<MovieDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 }

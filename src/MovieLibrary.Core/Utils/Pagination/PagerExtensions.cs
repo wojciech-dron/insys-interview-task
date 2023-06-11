@@ -6,12 +6,12 @@ namespace MovieLibrary.Core.Utils.Pagination;
 
 public static class PagerExtensions
 {
-    public static PagedList<T> ToPagedList<T>(this IQueryable<T> query, IPager? pager = null)
+    public static PagedList<T> ToPagedList<T>(this IQueryable<T> query, IPager pager = null)
     {
         return PagedList<T>.Create(query, pager ?? new Pager());
     }
 
-    public static async Task<PagedList<T>> ToPagedListAsync<T>(this IQueryable<T> query, IPager? pager = null)
+    public static async Task<PagedList<T>> ToPagedListAsync<T>(this IQueryable<T> query, IPager pager = null)
     {
         return await PagedList<T>.CreateAsync(query, pager ?? new Pager());
     }
