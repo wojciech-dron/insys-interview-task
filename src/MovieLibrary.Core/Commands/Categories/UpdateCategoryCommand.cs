@@ -35,7 +35,7 @@ public class UpdateCategoryValidator : AbstractValidator<UpdateCategoryCommand>
 
     private async Task<bool> UniqueAsync(string name, CancellationToken cancellationToken)
     {
-        return await _repository.IsNameUniqueAsync(name);
+        return await _repository.IsNameUniqueAsync(name, cancellationToken);
     }
 }
 
