@@ -10,6 +10,6 @@ public interface IRepository<TEntity>
     public Task<TEntity> GetAsync(int id);
     public Task<TEntity> AddAsync(TEntity entity);
     public Task<TEntity> UpdateAsync(TEntity entity);
-    public Task DeleteAsync(int id);
+    public Task DeleteAsync(TEntity entity);
     public Task<int> SaveChangesAsync();
 }

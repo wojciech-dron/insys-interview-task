@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using AutoMapper;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using MovieLibrary.Core.Queries;
 
@@ -11,11 +13,19 @@ public static class IocExtensions
         var assembly = typeof(IocExtensions).Assembly;
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assembly));
-        
         services.AddValidatorsFromAssembly(assembly);
-        // Register validators for requests
-        
-        
+        services.AddSingleton(GetMapper(assembly));
+
         services.AddScoped<CategoryQueries>();
+    }
+
+    internal static IMapper GetMapper(Assembly assembly)
+    {
+        var mapperConfiguration = new MapperConfiguration(config 
+            => { config.AddMaps(assembly); });
+        
+        mapperConfiguration.AssertConfigurationIsValid();
+        
+        return mapperConfiguration.CreateMapper();
     }
 }

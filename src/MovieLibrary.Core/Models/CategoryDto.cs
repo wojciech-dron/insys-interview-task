@@ -1,5 +1,5 @@
-﻿using MovieLibrary.Data.Entities;
-using Riok.Mapperly.Abstractions;
+﻿using AutoMapper;
+using MovieLibrary.Data.Entities;
 
 namespace MovieLibrary.Core.Models;
 
@@ -9,17 +9,11 @@ public class CategoryDto
     public string Name { get; set; }
 }
 
-[Mapper]
-public partial class CategoryMapper
+public class CategoryDtoProfile : Profile
 {
-    public partial CategoryDto Map(Category category);
-}
-
-
-public static class CategoryMapperExtensions
-{
-    public static CategoryDto MapToDto(this Category category)
+    public CategoryDtoProfile()
     {
-        return new CategoryMapper().Map(category);
+        CreateMap<Category, CategoryDto>()
+            .ReverseMap();
     }
 }

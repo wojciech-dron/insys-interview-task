@@ -46,9 +46,8 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         return entity;
     }
     
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(TEntity entity)
     {
-        var entity = await DbSet.FindAsync(id);
         DbSet.Remove(entity);
         
         await SaveChangesAsync();

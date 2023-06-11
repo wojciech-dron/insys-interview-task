@@ -7,44 +7,58 @@ using MovieLibrary.Data.Repositories;
 
 namespace MovieLibrary.Core.Commands.Categories;
 
-
-public class CreateCategory
+public class CreateCategoryCommand : IRequest<Category>
 {
-    public class Command : IRequest<Category>
+    public string Name { get; set; }
+}
+
+public class CreateCategoryValidator : AbstractValidator<CreateCategoryCommand>
+{
+    private readonly ICategoryRepository _repository;
+
+    public CreateCategoryValidator(ICategoryRepository repository)
     {
-        public string Name { get; set; }
+        _repository = repository;
+        
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .MinimumLength(3)
+            .MustAsync(UniqueAsync)
+            .WithMessage("Category name must be unique.");
     }
 
-    public class Validator : AbstractValidator<Command>
+    private async Task<bool> UniqueAsync(string name, CancellationToken cancellationToken)
     {
-        public Validator()
-        {
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .MinimumLength(3);
-        }
+        return await _repository.IsNameUniqueAsync(name);
+    }
+}
+
+public class CreateCategoryHandler : IRequestHandler<CreateCategoryCommand, Category>
+{
+    private readonly IValidator<CreateCategoryCommand> _validator;
+    private readonly ICategoryRepository _repository;
+
+    public CreateCategoryHandler(IValidator<CreateCategoryCommand> validator,
+        ICategoryRepository repository)
+    {
+        _validator = validator;
+        _repository = repository;
     }
 
-    public class Handler : IRequestHandler<Command, Category>
+    public async Task<Category> Handle(CreateCategoryCommand request,
+        CancellationToken cancellationToken)
     {
-        private readonly ICategoryRepository _repository;
-
-        public Handler(ICategoryRepository repository)
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+        
+        var category = new Category
         {
-            _repository = repository;
-        }
+            Name = request.Name
+        };
 
-        public async Task<Category> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var category = new Category
-            {
-                Name = request.Name
-            };
+        await _repository.AddAsync(category);
 
-            await _repository.AddAsync(category);
-            await _repository.SaveChangesAsync();
-
-            return category;
-        }
+        return category;
     }
 }

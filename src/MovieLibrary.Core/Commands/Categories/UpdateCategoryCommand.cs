@@ -7,55 +7,64 @@ using MovieLibrary.Data.Repositories;
 
 namespace MovieLibrary.Core.Commands.Categories;
 
-
-public class UpdateCategory
+public class UpdateCategoryCommand : IRequest<Category>
 {
-    public class Command : IRequest<Category>
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+
+public class UpdateCategoryValidator : AbstractValidator<UpdateCategoryCommand>
+{
+    private readonly ICategoryRepository _repository;
+
+    public UpdateCategoryValidator(ICategoryRepository repository)
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        _repository = repository;
+        
+        RuleFor(x => x.Id)
+            .MustAsync(ExistAsync);
+        
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .MinimumLength(3)
+            .MustAsync(UniqueAsync)
+            .WithMessage("Category name must be unique.");
     }
 
-    public class Validator : AbstractValidator<Command>
+    private async Task<bool> UniqueAsync(string name, CancellationToken cancellationToken)
     {
-        private readonly ICategoryRepository _repository;
-
-        public Validator(ICategoryRepository repository)
-        {
-            _repository = repository;
-            
-            RuleFor(x => x.Id)
-                .MustAsync(ExistAsync);
-            
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .MinimumLength(3);
-        }
-
-        private async Task<bool> ExistAsync(int id, CancellationToken cancellationToken)
-        {
-            return await _repository.ExistsAsync(id);
-        }
+        return await _repository.IsNameUniqueAsync(name);
     }
 
-    public class Handler : IRequestHandler<Command, Category>
+    private async Task<bool> ExistAsync(int id, CancellationToken cancellationToken)
     {
-        private readonly ICategoryRepository _repository;
+        return await _repository.ExistsAsync(id);
+    }
+}
 
-        public Handler(ICategoryRepository repository)
-        {
-            _repository = repository;
-        }
+public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, Category>
+{
+    private readonly ICategoryRepository _repository;
+    private readonly IValidator<UpdateCategoryCommand> _validator;
 
-        public async Task<Category> Handle(Command request, CancellationToken cancellationToken)
-        {
-            var category = await _repository.GetAsync(request.Id);
-            
-            category.Name = request.Name;
-            
-            await _repository.UpdateAsync(category);
+    public UpdateCategoryHandler(ICategoryRepository repository,
+        IValidator<UpdateCategoryCommand> validator)
+    {
+        _repository = repository;
+        _validator = validator;
+    }
 
-            return category;
-        }
+    public async Task<Category> Handle(UpdateCategoryCommand request,
+        CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
+        var category = await _repository.GetAsync(request.Id);
+        category.Name = request.Name;
+        
+        await _repository.UpdateAsync(category);
+        return category;
     }
 }
