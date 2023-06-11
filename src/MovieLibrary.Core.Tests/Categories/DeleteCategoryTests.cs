@@ -31,7 +31,7 @@ public class DeleteCategoryTests
     {
         // Arrange
         var mockRepository = Substitute.For<ICategoryRepository>();
-        mockRepository.GetAsync(1, CancellationToken.None).Returns(Task.FromResult((Category)null));
+        mockRepository.GetAsync(1, CancellationToken.None).Returns(Task.FromResult((Category)null!));
 
         var handler = new DeleteCategoryHandler(mockRepository);
 
