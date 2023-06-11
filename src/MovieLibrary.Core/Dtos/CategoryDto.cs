@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MovieLibrary.Data.Entities;
 
-namespace MovieLibrary.Core.Models;
+namespace MovieLibrary.Core.Dtos;
 
 public class CategoryDto
 {

@@ -4,7 +4,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MovieLibrary.Core.Commands.Categories;
-using MovieLibrary.Core.Models;
+using MovieLibrary.Core.Dtos;
 using MovieLibrary.Core.Queries;
 
 namespace MovieLibrary.Api.Controllers;
@@ -15,10 +15,11 @@ public class CategoryController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
-    private readonly CategoryQueries _queries;
+    private readonly ICategoryQueries _queries;
 
-    public CategoryController(IMediator mediator, IMapper mapper,
-        CategoryQueries queries)
+    public CategoryController(IMediator mediator, 
+        IMapper mapper,
+        ICategoryQueries queries)
     {
         _mediator = mediator;
         _mapper = mapper;
@@ -28,7 +29,7 @@ public class CategoryController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetList()
     {
-        var result = await _queries.GetListAsync();
+        var result = await _queries.GetAllAsync();
         return Ok(result);
     }
 
