@@ -68,8 +68,9 @@ public class CategoryController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-    public async Task Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         await _mediator.Send(new DeleteCategoryCommand { Id = id });
+        return NoContent();
     }
 }

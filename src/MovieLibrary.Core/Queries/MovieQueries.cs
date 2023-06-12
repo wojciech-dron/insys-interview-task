@@ -4,8 +4,10 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MovieLibrary.Core.Dtos;
+using MovieLibrary.Core.Exceptions;
 using MovieLibrary.Core.Queries.Filters;
 using MovieLibrary.Core.Utils.Pagination;
+using MovieLibrary.Data.Entities;
 using MovieLibrary.Data.Repositories;
 
 namespace MovieLibrary.Core.Queries;
@@ -26,7 +28,8 @@ public class MovieQueries : IMovieQueries
     {
         return await _repository.GetQuery()
             .ProjectTo<MovieDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .FirstOrDefaultAsync(p => p.Id == id)
+               ?? throw new NotFoundException(typeof(Movie), id);
     }
 
     public async Task<PagedList<MovieDto>> GetFilteredAsync(MovieFilter filter)

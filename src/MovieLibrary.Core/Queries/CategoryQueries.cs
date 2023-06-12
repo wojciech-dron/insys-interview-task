@@ -4,6 +4,8 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MovieLibrary.Core.Dtos;
+using MovieLibrary.Core.Exceptions;
+using MovieLibrary.Data.Entities;
 using MovieLibrary.Data.Repositories;
 
 namespace MovieLibrary.Core.Queries;
@@ -22,9 +24,10 @@ public class CategoryQueries : ICategoryQueries
 
     public async Task<CategoryDto> Get(int id)
     {
-        return await _repository.GetQuery()
+        return (await _repository.GetQuery()
             .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .FirstOrDefaultAsync(p => p.Id == id))
+            ?? throw new NotFoundException(typeof(Category), id);
     }
     
     public async Task<List<CategoryDto>> GetAllAsync()

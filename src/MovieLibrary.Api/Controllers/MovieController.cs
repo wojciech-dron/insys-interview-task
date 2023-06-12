@@ -61,8 +61,9 @@ public class MovieController : ControllerBase
     [HttpDelete("{id}")]
     [ProducesResponseType((int)HttpStatusCode.NoContent)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-    public async Task Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         await _mediator.Send(new DeleteMovieCommand { Id = id });
+        return NoContent();
     }
 }

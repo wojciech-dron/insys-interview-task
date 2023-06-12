@@ -23,13 +23,8 @@ public class CreateCategoryValidator : AbstractValidator<CreateCategoryCommand>
         RuleFor(x => x.Name)
             .NotEmpty()
             .MinimumLength(3)
-            .MustAsync(UniqueAsync)
+            .MustAsync((name, ct) => _repository.IsNameUniqueAsync(name, 0, ct))
             .WithMessage("Category name must be unique.");
-    }
-
-    private async Task<bool> UniqueAsync(string name, CancellationToken cancellationToken)
-    {
-        return await _repository.IsNameUniqueAsync(name, cancellationToken);
     }
 }
 
