@@ -12,6 +12,13 @@ public class MovieFilter : Pager
     public decimal? ImdbRatingMin { get; set; }
     public decimal? ImdbRatingMax { get; set; }
 
+    public MovieFilter()
+    {
+        // SQLite does not support expressions of type 'decimal' in ORDER BY clauses.
+        // OrderBy = nameof(Movie.ImdbRating);
+        // Direction = "DESC";
+    }
+
     public IQueryable<Movie> Filter(IQueryable<Movie> query)
     {
         if (!string.IsNullOrWhiteSpace(TitlePhrase)) 
