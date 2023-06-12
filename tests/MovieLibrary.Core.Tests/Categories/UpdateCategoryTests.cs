@@ -14,7 +14,7 @@ public class UpdateCategoryTests
         var mockRepository = Substitute.For<ICategoryRepository>();
         var existingCategory = new Category { Id = 1, Name = "OldCategoryName" };
         mockRepository.GetAsync(1, CancellationToken.None).Returns(Task.FromResult(existingCategory));
-        mockRepository.IsNameUniqueAsync("NewCategoryName").Returns(Task.FromResult(true));
+        mockRepository.IsNameUniqueAsync("NewCategoryName", 1).Returns(Task.FromResult(true));
 
         var validator = new UpdateCategoryValidator(mockRepository);
         var handler = new UpdateCategoryHandler(mockRepository, validator);
@@ -28,7 +28,8 @@ public class UpdateCategoryTests
         category.Should().NotBeNull();
         category.Name.Should().Be("NewCategoryName");
 
-        await mockRepository.Received().UpdateAsync(Arg.Is<Category>(x => x.Name == "NewCategoryName" && x.Id == 1), CancellationToken.None);
+        await mockRepository.Received()
+            .UpdateAsync(Arg.Is<Category>(x => x.Name == "NewCategoryName" && x.Id == 1), CancellationToken.None);
     }
 
     [Fact]

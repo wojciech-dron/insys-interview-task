@@ -19,7 +19,7 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> IsNameUniqueAsync(string name, int exceptId, CancellationToken cancellationToken = default)
+    public async Task<bool> IsNameUniqueAsync(string name, int exceptId = 0, CancellationToken cancellationToken = default)
     {
         return await DbSet
             .Where(c => c.Id != exceptId)

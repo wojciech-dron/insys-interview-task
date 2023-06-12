@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MovieLibrary.Core\MovieLibrary.Core.csproj" />
+      <ProjectReference Include="..\..\src\MovieLibrary.Core\MovieLibrary.Core.csproj" />
     </ItemGroup>
 
 </Project>

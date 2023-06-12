@@ -9,6 +9,6 @@ namespace MovieLibrary.Data.Repositories;
 public interface ICategoryRepository : IRepository<Category>
 {
     Task<List<Category>> GetAsync(List<int> categoriesIds, CancellationToken cancellationToken = default);
-    Task<bool> IsNameUniqueAsync(string name, int exceptId, CancellationToken cancellationToken = default);
+    Task<bool> IsNameUniqueAsync(string name, int exceptId = 0, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(IEnumerable<int> ids, CancellationToken cancellationToken = default);
 }

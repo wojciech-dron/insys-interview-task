@@ -12,7 +12,7 @@ public class CreateCategoryTests
     {
         // Arrange
         var mockRepository = Substitute.For<ICategoryRepository>();
-        mockRepository.IsNameUniqueAsync("CategoryName", CancellationToken.None)
+        mockRepository.IsNameUniqueAsync("CategoryName", 0, CancellationToken.None)
             .Returns(Task.FromResult(true));
         var validator = new CreateCategoryValidator(mockRepository);
         var handler = new CreateCategoryHandler(validator, mockRepository);
@@ -35,7 +35,7 @@ public class CreateCategoryTests
     {
         // Arrange
         var mockRepository = Substitute.For<ICategoryRepository>();
-        mockRepository.IsNameUniqueAsync("CategoryName", CancellationToken.None)
+        mockRepository.IsNameUniqueAsync("CategoryName", 0, CancellationToken.None)
             .Returns(Task.FromResult(false));
         var validator = new CreateCategoryValidator(mockRepository);
         var handler = new CreateCategoryHandler(validator, mockRepository);
